@@ -1,19 +1,14 @@
 import { test, expect } from '../support/test';
-import { LoginPage } from '../support/pages/login-page';
 import { InventoryPage } from '../support/pages/inventory-page';
 import { InventoryItemPage } from '../support/pages/inventory-item-page';
 import { CartPage } from '../support/pages/cart-page';
-import { STANDARD_USER } from '../support/user';
 
 test.describe('Add to Cart - Single Item', () => {
-    let loginPage: LoginPage;
     let inventoryPage: InventoryPage;
 
     test.beforeEach(async ({ page }) => {
-        loginPage = new LoginPage(page);
         inventoryPage = new InventoryPage(page);
-        await loginPage.visit();
-        await loginPage.login(STANDARD_USER);
+        await inventoryPage.visit();
         await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
     });
 

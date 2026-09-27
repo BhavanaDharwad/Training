@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
+import { STANDARD_USER_AUTH_FILE } from './support/auth';
 
 dotenv.config({ path: '.env.local', override: false });
 
@@ -21,14 +22,18 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
+
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], storageState: STANDARD_USER_AUTH_FILE },
+      dependencies: ['setup'],
     },
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { ...devices['Desktop Firefox'], storageState: STANDARD_USER_AUTH_FILE },
+      dependencies: ['setup'],
     },
   ],
 });

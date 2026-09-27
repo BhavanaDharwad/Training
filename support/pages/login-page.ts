@@ -1,4 +1,5 @@
 import {Page, Locator} from '@playwright/test';
+import { User } from '../user';
 
 export class LoginPage {
     constructor(private page: Page) {}
@@ -32,7 +33,7 @@ export class LoginPage {
         return this.page.locator('[data-icon="xmark"]');
     }
 
-    async login(user: { username: string; password: string }): Promise<void> {
+    async login(user: User): Promise<void> {
         await this.getUserName().fill(user.username);
         await this.getPassword().fill(user.password);
         await this.getLoginButton().click();

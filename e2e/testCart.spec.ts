@@ -1,20 +1,15 @@
 import {test, expect} from '../support/test';
-import { LoginPage } from '../support/pages/login-page';
 import { InventoryPage } from '../support/pages/inventory-page';
 import { CART_TEST } from '../support/pages/test-cart';
-import { STANDARD_USER } from '../support/user';
 
 test.describe('test cart', () => {
-    let loginPage: LoginPage;
     let inventoryPage: InventoryPage;
     let cartPage: CART_TEST;
 
     test.beforeEach(async ({ page}) => {
-        loginPage = new LoginPage(page);
         inventoryPage = new InventoryPage(page);
         cartPage = new CART_TEST(page);
-        loginPage.login(STANDARD_USER);
-        loginPage.visit();
+        await inventoryPage.visit();
         await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
     })
 

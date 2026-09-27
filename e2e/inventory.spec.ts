@@ -1,21 +1,17 @@
 import { test, expect } from '../support/test';
-import { LoginPage } from '../support/pages/login-page';
 import { InventoryPage, SortOption } from '../support/pages/inventory-page';
 import { InventoryItemPage } from '../support/pages/inventory-item-page';
-import { STANDARD_USER, PROBLEM_USER } from '../support/user';
+import { PROBLEM_USER } from '../support/user';
 
 const PRICE_FORMAT = /^\$\d+\.\d{2}$/;
 const PRODUCT_COUNT = 6;
 
 test.describe('Inventory Page - Display & Content', () => {
-    let loginPage: LoginPage;
     let inventoryPage: InventoryPage;
 
     test.beforeEach(async ({ page }) => {
-        loginPage = new LoginPage(page);
         inventoryPage = new InventoryPage(page);
-        await loginPage.visit();
-        await loginPage.login(STANDARD_USER);
+        await inventoryPage.visit();
         await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
     });
 
@@ -66,12 +62,12 @@ test.describe('Inventory Page - Display & Content', () => {
 });
 
 test.describe('Inventory Page - problem_user regression', () => {
-    test('should show the known broken-image bug for problem_user', async ({ page }) => {
-        const loginPage = new LoginPage(page);
+    test.use({ storageState: { cookies: [], origins: [] } });
+
+    test('should show the known broken-image bug for problem_user', async ({ page, loginAs }) => {
         const inventoryPage = new InventoryPage(page);
 
-        await loginPage.visit();
-        await loginPage.login(PROBLEM_USER);
+        await loginAs(PROBLEM_USER);
         await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
         await expect(inventoryPage.getInventoryItem()).toHaveCount(PRODUCT_COUNT);
 
